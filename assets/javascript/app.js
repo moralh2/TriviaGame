@@ -46,6 +46,22 @@ var game = function(which) {
 
 }
 
+var wrongQ = function() {
+
+    var cardHeader = $(".card-header")
+    cardHeader.empty()
+    var qDiv = $("<h3>")
+    var question = "You got it wrong, brah"
+    qDiv.text(question)
+    cardHeader.append(qDiv)
+
+    var cardBody = $(".card-body")
+    cardBody.empty()
+
+    cardBody.prepend($('<img>',{id:'theImg',src:"assets/images/bender-crying.gif"}))
+    
+
+}
 var weveGotALiveOne = function(answerText) {
     if (answerText) {
         if (answerText == correctAnswer) {
@@ -62,6 +78,8 @@ var weveGotALiveOne = function(answerText) {
         console.log("time out")
         // timeout
     }
+
+    wrongQ()
     waitForNew.start()
 }
 
@@ -99,6 +117,9 @@ var waitForNew = {
     stop: function() {
         clearInterval(waitId); 
     },
+    reset: function() {
+        waitForNew.time = 5
+    },
     count: function() {
         waitForNew.time--
         waitForNew.check()
@@ -106,6 +127,7 @@ var waitForNew = {
     check: function() {
         if (waitForNew.time <= 0) {
             waitForNew.stop()
+            waitForNew.reset()
             game("second")
 
             // nextQuestion()
