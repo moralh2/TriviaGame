@@ -10,16 +10,16 @@
     <!-- Trivia Game CSS -->
     <link rel="stylesheet" type="text/css" media="screen" href="assets/css/style.css" />
     <!-- Font -->
-    <link href="https://fonts.googleapis.com/css?family=Creepster" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Spicy+Rice" rel="stylesheet">
 
     <style>
     body {
-        background-image: url("assets/images/scary-movie-1-1024.jpg");
+        background-image: url("assets/images/futu-blue-bg.png");
         /* background-position: 0 60px; */
         /* background-size:     cover;                      */
         /* background-repeat:   no-repeat; */
-        background-position: center center;
-        font-family: 'Creepster', cursive;
+        /* background-position: center center; */
+        font-family: 'Spicy Rice', cursive;
 
 
     }
@@ -29,8 +29,22 @@
         text-align: center;
     }
 
-    #preguntas {
-        /* font-size: 2rem; */
+    .card-body {
+        font-size: 1.25rem;
+    }
+
+    .card {         
+        background-color: none !important;
+    }
+
+    .possible-answer {
+        background-color: #c8daff;
+    }
+
+    .possible-answer:hover {
+        background-color: #6293f9;
+        color: white;
+        transform: rotateY(10deg);
     }
     
     </style>
@@ -40,57 +54,40 @@
 <body>
 
     <div class="container title mt-2">
-        <h1 class="display-3">What's your favorite scary movie?</h1>
+        <h1 class="display-3">Have you ever seen Futurama? We're about to find out!</h1>
     </div>
 
 
 
-    <div id="preguntas" class="container-fluid mt-5">
+    <div id="preguntas" class="container mt-5">
         <div class="card text-center">
 
-                <div class="card-header">
-                        <h3>In what year did the original Halloween movie come out?</h3>
+            <div class="card-header">
+                    <h3>What is the name of Leela's Pet?</h3>
+            </div>
+
+            <div class="card-body">
+                <!-- <h5 class="card-title"></h5> -->
+                <div class="alert possible-answer" role="alert">
+                        This is the first answer
                 </div>
-
-                <div class="card-body">
-                  <!-- <h5 class="card-title"></h5> -->
-
-                    <div class="row-fluid justify-content-md-center">
-                        <!-- <div class="col-md-6"> -->
-                            <div class="custom-control custom-radio">
-                                <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input">
-                                <label class="custom-control-label" for="customRadio1">Toggle this custom radio</label>
-                            </div>
-                        <!-- </div> -->
-                        <!-- <div class="col-md-3"> -->
-                            <div class="custom-control custom-radio">
-                                <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input">
-                                <label class="custom-control-label" for="customRadio2">Or toggle this other custom radio</label>
-                            </div>
-                        <!-- </div> -->
-                    <!-- </div> -->
-                    <!-- <div class="row justify-content-md-center"> -->
-                        <!-- <div class="col-md-3"> -->
-                            <div class="custom-control custom-radio">
-                                <input type="radio" id="customRadio3" name="customRadio" class="custom-control-input">
-                                <label class="custom-control-label" for="customRadio3">Toggle this custom radio</label>
-                            </div>
-                        <!-- </div> -->
-                        <!-- <div class="col-md-3"> -->
-                            <div class="custom-control custom-radio">
-                                <input type="radio" id="customRadio4" name="customRadio" class="custom-control-input">
-                                <label class="custom-control-label" for="customRadio4">Or toggle this other custom radio</label>
-                            </div>
-                        <!-- </div> -->
-                    </div>
-
-
+                <div class="alert possible-answer" role="alert">
+                        This is the second answer
                 </div>
-                <div class="card-footer text-muted">
-                  2 days ago
+                <div class="alert possible-answer" role="alert">
+                        This is the third answer
                 </div>
-              </div>
+                <div class="alert possible-answer" role="alert">
+                        This is the fourth answer
+                </div>
+            </div>
 
+
+            <div class="card-footer text-muted">
+                <p>Time Remaining: <span>7</span> seconds</p>
+            </div>
+
+        </div>
     </div>
     <!-- jQuery, Popper.js, Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
