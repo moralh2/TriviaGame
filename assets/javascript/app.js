@@ -1,4 +1,4 @@
-var answerArray = ["This is the first answer", "This is the second answer", "This is the third answer", "This is the fourth answer"]
+// var answerArray = ["This is the first answer", "This is the second answer", "This is the third answer", "This is the fourth answer"]
 // var timeInSeconds = "7"
 var correctAnswer = "This is the second answer"
 
@@ -6,13 +6,27 @@ var correctAnswer = "This is the second answer"
 var intervalId;
 
 
+// save id for timer in between questions
+var waitId;
+
+
 $( document ).ready(function() {
     console.log( "ready!" );
-    var cardBody = $(".card-body")
+    game("first")
+});
 
-    // var cardFooter = $(".card-footer")
-    // var timeRemaining = "<p>Time Remaining: <span>"+timeInSeconds+"</span> seconds</p>"
-    // cardFooter.html(timeRemaining)
+var game = function(which) {
+
+    var cardHeader = $(".card-header")
+    cardHeader.empty()
+    var qDiv = $("<h3>")
+    var question = trivia[which].question
+    qDiv.text(question)
+    cardHeader.append(qDiv)
+
+    var cardBody = $(".card-body")
+    cardBody.empty()
+    var answerArray = trivia[which].answers
 
     for (i = 0; i < answerArray.length; i++) {
         var ansDiv = $("<div>")
@@ -29,7 +43,8 @@ $( document ).ready(function() {
 
     timer.reset()
     timer.start()
-});
+
+}
 
 var weveGotALiveOne = function(answerText) {
     if (answerText) {
@@ -39,7 +54,7 @@ var weveGotALiveOne = function(answerText) {
             //you win
         } else {
             console.log("you lose")
-            // timer.stop()
+            timer.stop()
             // you lose
         }
     }
@@ -47,12 +62,14 @@ var weveGotALiveOne = function(answerText) {
         console.log("time out")
         // timeout
     }
+    waitForNew.start()
 }
 
+// timer obj
 var timer = {
-    time: 30,
+    time: 15,
     reset: function() {
-        timer.time = 30
+        timer.time = 15
         displayTime(timer.time)
     },
     stop: function() {
@@ -69,12 +86,48 @@ var timer = {
     check: function() {
         if (timer.time <= 0) {
             timer.stop()
+            weveGotALiveOne()
         }
     }
 }
 
+var waitForNew = {
+    time: 5,
+    start: function() {
+        waitId = setInterval(waitForNew.count, 1000);
+    },
+    stop: function() {
+        clearInterval(waitId); 
+    },
+    count: function() {
+        waitForNew.time--
+        waitForNew.check()
+    },
+    check: function() {
+        if (waitForNew.time <= 0) {
+            waitForNew.stop()
+            game("second")
+
+            // nextQuestion()
+        }
+    },
+}
+
+// function to add inner html to card footer w info on time remaining
 var displayTime = function(time) {
     var cardFooter = $(".card-footer")
     var timeRemaining = "<p>Time Remaining: <span>"+time+"</span> seconds</p>"
     cardFooter.html(timeRemaining)
+}
+
+// obj to store questions and answers
+var trivia = {
+    first: {
+        question: "What is the name of Leela's Pet?",
+        answers: ["This is the first answer", "This is the second answer", "This is the third answer", "This is the fourth answer"]
+    },
+    second: {
+        question: "What is the name of Leela's OTHER Pet?",
+        answers: ["This is the first AAnswer", "This is the second answer", "This is the third AAnswer", "This is the fourth AAnswer"]
+    }
 }
