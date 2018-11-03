@@ -1,6 +1,6 @@
-// var answerArray = ["This is the first answer", "This is the second answer", "This is the third answer", "This is the fourth answer"]
-// var timeInSeconds = "7"
-var correctAnswer = "This is the second answer"
+var questionNumber = 1;
+
+
 
 // save id for setInterval
 var intervalId;
@@ -12,21 +12,22 @@ var waitId;
 
 $( document ).ready(function() {
     console.log( "ready!" );
-    game("first")
+    game(questionNumber)
 });
 
-var game = function(which) {
+var game = function(questionNumber) {
 
+    whichQ = String(questionNumber)
     var cardHeader = $(".card-header")
     cardHeader.empty()
     var qDiv = $("<h3>")
-    var question = trivia[which].question
+    var question = trivia[whichQ].question
     qDiv.text(question)
     cardHeader.append(qDiv)
 
     var cardBody = $(".card-body")
     cardBody.empty()
-    var answerArray = trivia[which].answers
+    var answerArray = trivia[whichQ].answers
 
     for (i = 0; i < answerArray.length; i++) {
         var ansDiv = $("<div>")
@@ -128,7 +129,8 @@ var waitForNew = {
         if (waitForNew.time <= 0) {
             waitForNew.stop()
             waitForNew.reset()
-            game("second")
+            ++questionNumber
+            game(questionNumber)
 
             // nextQuestion()
         }
@@ -150,7 +152,7 @@ var trivia = {
         correct: "Nibbler"
     },
     '2': {
-        question: "What is Fry's favourite soft drink?",
+        question: "What is Fry's favorite soft drink?",
         answers: ["Slurm", "Slurp", "Zero", "Zoorp"],
         correct: "Slurm"
     },
@@ -160,7 +162,7 @@ var trivia = {
         correct: "A ball of garbage"
     },
     '4': {
-        question: "What was top of the list of Benders 10 most commonly used words?",
+        question: "What was at the top of the list of Bender's 10 most commonly used words?",
         answers: ["Chump", "Pimpmobile", "Ass", "Chumpette"],
         correct: "Ass"
     },
