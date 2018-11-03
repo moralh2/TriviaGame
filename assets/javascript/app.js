@@ -51,8 +51,6 @@ var displayStart = function(head, image, footer) {
     cardFooter.empty()
     var strBtn = $("<button>")
     strBtn.addClass("btn").addClass("btn-primary").text(footer)
-    // strBtn.addClass("btn-primary")
-    // strBtn.text(footer)
     strBtn.on( "click", function(event) {
         resetGame() 
         displayQuestion(questionNumber)
@@ -73,11 +71,7 @@ var displayQuestion = function(questionNumber) {
     for (i = 0; i < answerArray.length; i++) {
         var ansDiv = $("<div>")
         ansDiv.addClass("alert").addClass("possible-answer").text(answerArray[i])
-        // ansDiv.addClass("possible-answer")
-        // ansDiv.text(answerArray[i])
         ansDiv.on( "click", function(event) {
-            // which_one = $(this)[0].innerText  
-            // console.log( which_one )
             verifyResponse($(this)[0].innerText)
         });
         cardBody.append(ansDiv)
@@ -86,32 +80,26 @@ var displayQuestion = function(questionNumber) {
     timer.start()
 }
 
-var rightAnswer = function()    { displayIntermission("You got it right!", "assets/images/bender-high-fives-self.gif") }
-
-var wrongAnswer = function()    { displayIntermission("You got it wrong, brah", "assets/images/bender-crying.gif") }
-
-var timedOut = function()       { displayIntermission("You ran out of 🕰", "assets/images/bender-you-stink.gif") }
-
 // loads html content for in-between questions, with approproate message (win, loss, timeout) and gif
 var displayIntermission = function(head, image) {
     displayHeader(head)
     displayImage(image)
 }
 
+// verify if user answered correctly or not at all, display meesage/gif for win, lose or timeout
 var verifyResponse = function(answerText) {
     if (answerText) {
+        timer.stop()
         if (answerText == trivia[String(questionNumber)].correct) {
             wins++
-            timer.stop()
-            rightAnswer()
+            displayIntermission("You got it right!", "assets/images/bender-high-fives-self.gif")
         } else {
             losses++
-            timer.stop()
-            wrongAnswer()
+            displayIntermission("You got it wrong, brah", "assets/images/bender-crying.gif")
         }
     }
     else {
-        timedOut()
+        displayIntermission("You ran out of 🕰", "assets/images/bender-you-stink.gif")
         losses++
     }
     intermission = 1
@@ -153,7 +141,6 @@ var timer = {
             timer.reset(waitForUser)
             ++questionNumber
             if (questionNumber > 10) {
-                console.log("Game Over")
                 gameOver()
             }
             else {
