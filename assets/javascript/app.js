@@ -50,9 +50,9 @@ var displayStart = function(head, image, footer) {
     var cardFooter = $(".card-footer")
     cardFooter.empty()
     var strBtn = $("<button>")
-    strBtn.addClass("btn")
-    strBtn.addClass("btn-primary")
-    strBtn.text(footer)
+    strBtn.addClass("btn").addClass("btn-primary").text(footer)
+    // strBtn.addClass("btn-primary")
+    // strBtn.text(footer)
     strBtn.on( "click", function(event) {
         resetGame() 
         displayQuestion(questionNumber)
@@ -72,13 +72,13 @@ var displayQuestion = function(questionNumber) {
 
     for (i = 0; i < answerArray.length; i++) {
         var ansDiv = $("<div>")
-        ansDiv.addClass("alert")
-        ansDiv.addClass("possible-answer")
-        ansDiv.text(answerArray[i])
+        ansDiv.addClass("alert").addClass("possible-answer").text(answerArray[i])
+        // ansDiv.addClass("possible-answer")
+        // ansDiv.text(answerArray[i])
         ansDiv.on( "click", function(event) {
-            which_one = $(this)[0].innerText  
-            console.log( which_one )
-            verifyResponse(which_one)
+            // which_one = $(this)[0].innerText  
+            // console.log( which_one )
+            verifyResponse($(this)[0].innerText)
         });
         cardBody.append(ansDiv)
     }
@@ -96,16 +96,6 @@ var timedOut = function()       { displayIntermission("You ran out of 🕰", "as
 var displayIntermission = function(head, image) {
     displayHeader(head)
     displayImage(image)
-
-    // var cardHeader = $(".card-header")
-    // cardHeader.empty()
-    // var qDiv = $("<h3>")
-    // var question = head
-    // qDiv.text(question)
-    // cardHeader.append(qDiv)
-    // var cardBody = $(".card-body")
-    // cardBody.empty()
-    // cardBody.prepend($('<img>',{id:'theImg',src: image}))
 }
 
 var verifyResponse = function(answerText) {
