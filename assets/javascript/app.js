@@ -45,6 +45,15 @@ var displayImage = function(image) {
     cardBody.prepend(imgBody)
 }
 
+// display second image in card body
+var displaySecondImage = function(image) {
+    var cardBody = $(".card-body")
+    // cardBody.empty()
+    imgBody = $('<img>',{id:'theImg',src: image})
+    imgBody.addClass("img-fluid")
+    cardBody.append(imgBody)
+}
+
 // loads content for game start and game over (message, btn, gif)
 var displayStart = function(head, image, footer) {
     displayHeader(head)
@@ -86,6 +95,8 @@ var displayQuestion = function(questionNumber) {
 var displayIntermission = function(head, image) {
     displayHeader(head)
     displayImage(image)
+    displaySecondImage(trivia[String(questionNumber)].gif)
+
 }
 
 // verify if user answered correctly or not at all, display meesage/gif for win, lose or
@@ -166,51 +177,61 @@ var trivia = {
     '1': {
         question: "What is the name of Leela's Pet?",
         answers: ["Nobber", "Mibbler", "Nubben", "Nibbler"],
-        correct: "Nibbler"
+        correct: "Nibbler",
+        gif: "assets/images/leele-and-nibblers.gif"
     },
     '2': {
         question: "What is Fry's favorite soft drink?",
         answers: ["Slurm", "Slurp", "Zero", "Zoorp"],
-        correct: "Slurm"
+        correct: "Slurm",
+        gif: "assets/images/fry-vending-machine.gif"
     },
     '3': {
         question: "What did the Professor's smelloscope detect in space?",
         answers: ["A planet made of cheese", "A comet", "A ball of garbage", "An alien ship"],
-        correct: "A ball of garbage"
+        correct: "A ball of garbage",
+        gif: "assets/images/garbage-ball.jpg"
     },
     '4': {
         question: "What was at the top of the list of Bender's 10 most commonly used words?",
         answers: ["Chump", "Pimpmobile", "Ass", "Chumpette"],
-        correct: "Ass"
+        correct: "Ass",
+        gif: "assets/images/bender-bite-shiny-metal-ass.gif"
     },
     '5': {
         question: "What's the name of the Professor's company?",
         answers: ["Federal Express", "Planet Express", "Earth Express", "Federal Express"],
         correct: "Planet Express",
+        gif: "assets/images/planet-express.gif"
     },
     '6': {
         question: "What is the name of Captain Zapp's assistant?",
         answers: ["Yip", "Kif", "Zip", "Bif"],
-        correct: "Kif"
+        correct: "Kif",
+        gif: "assets/images/kif-zap-fry.gif"
     },
     '7': {
         question: "What was the name of the space cruise ship that was destroyed by a black hole?",
         answers: ["The Mayflower One", "The Titanic", "The Enterprise", "Hunter IV"],
-        correct: "The Titanic"
+        correct: "The Titanic",
+        gif: "assets/images/zap-titanic.gif"
     },
     '8': {
         question: "What was Fry's job in 1999?",
         answers: ["Pizza Delivery Boy", "Software Developer", "Candy Truck Driver", "Milkman"],
-        correct: "Pizza Delivery Boy"
+        correct: "Pizza Delivery Boy",
+        gif: "assets/images/fry-pizza-beer.gif"
     },
     '9': {
         question: "What was Fry's bank account balance in 1999?",
         answers: ["33 Cents", "53 Cents", "73 Cents", "93 Cents"],
-        correct: "93 Cents"
+        correct: "93 Cents",
+        gif: "assets/images/fry-rich-slob.gif"
     },
     '10': {
         question: "1000 years later, what was Fry's bank account balance?",
         answers: ["2.1 Million", "4.3 Billion", "6.5 Trillion", "6.2 Billion"],
-        correct: "4.3 Billion"
+        correct: "4.3 Billion",
+        gif: "assets/images/bender-making-rain.gif"
     }
 }
