@@ -1,92 +1,91 @@
-// global for time
+// used for timers
 var time = 0;
 
+// current question
 var questionNumber = 1;
 
-// save id for setInterval
+// id for setInterval timer
 var intervalId;
 
 // save id for timer in between questions
 var waitId;
+// try to use one timer
 
-// how long to wait for user to answer
+// seconds to wait for user to respond
 var waitForUser = 20
 
-// duration of message in-between questions
+// duration [s] for message in-between questions (correct or wrong answer)
 var waitForMessage = 5
 
+// initial call; loads start button, waits for user
 $( document ).ready(function() {
-    console.log( "ready!" );
     promptStart()
-    // triviaGame.displayQuestion(questionNumber)
-    // game(questionNumber)
-    // load a start button on lead
-    // btn triggers game to start as new
 });
 
 // fnc for start button and initial display, awaiting user to click to begin the game
 var promptStart = function() {
     var cardHeader = $(".card-header")
     cardHeader.empty()
+    
     var qDiv = $("<h3>")
     qDiv.text("How about playing some trivia, and finding out?")
     cardHeader.append(qDiv)
 
     var cardBody = $(".card-body")
     cardBody.empty()
+    
     cardBody.prepend($('<img>',{id:'theImg',src:"assets/images/bender-electric.gif"}))
 
     var cardFooter = $(".card-footer")
     cardFooter.empty()
-
-    var timeRemaining = "<p>Time Remaining: <span>"+time+"</span> seconds</p>"
-
 
     var strBtn = $("<button>")
     strBtn.addClass("btn")
     strBtn.addClass("btn-primary")
     strBtn.text("Start Game")
     strBtn.on( "click", function(event) {
-        console.log( "Starting a new game" )
         triviaGame.displayQuestion(questionNumber)
-
     });
     cardFooter.append(strBtn)
 }
 
-var triviaGame = {
-    questionNumber: 1,
-    intervalId: '',
-    displayQuestion: function(questionNumber) {
-        curruentQuestion = String(questionNumber)
+// fnc to load html w/ question and answers unto page; resets, starts timer
+var displayQuestion = function(questionNumber) {
+    curruentQuestion = String(questionNumber)
 
-        var cardHeader = $(".card-header")
-        cardHeader.empty()
-        var qDiv = $("<h3>")
-        var question = trivia[curruentQuestion].question
-        qDiv.text(question)
-        cardHeader.append(qDiv)
-    
-        var cardBody = $(".card-body")
-        cardBody.empty()
-        var answerArray = trivia[curruentQuestion].answers
-    
-        for (i = 0; i < answerArray.length; i++) {
-            var ansDiv = $("<div>")
-            ansDiv.addClass("alert")
-            ansDiv.addClass("possible-answer")
-            ansDiv.text(answerArray[i])
-            ansDiv.on( "click", function(event) {
-                which_one = $(this)[0].innerText  
-                console.log( which_one )
-                triviaGame.verifyResponse(which_one)
-            });
-            cardBody.append(ansDiv)
-        }
-    
-        timer.reset()
-        timer.start()
-    },
+    var cardHeader = $(".card-header")
+    cardHeader.empty()
+    var qDiv = $("<h3>")
+    var question = trivia[curruentQuestion].question
+    qDiv.text(question)
+    cardHeader.append(qDiv)
+
+    var cardBody = $(".card-body")
+    cardBody.empty()
+    var answerArray = trivia[curruentQuestion].answers
+
+    for (i = 0; i < answerArray.length; i++) {
+        var ansDiv = $("<div>")
+        ansDiv.addClass("alert")
+        ansDiv.addClass("possible-answer")
+        ansDiv.text(answerArray[i])
+        ansDiv.on( "click", function(event) {
+            which_one = $(this)[0].innerText  
+            console.log( which_one )
+            triviaGame.verifyResponse(which_one)
+        });
+        cardBody.append(ansDiv)
+    }
+
+    timer.reset()
+    timer.start()
+}
+
+var triviaGame = {
+    // questionNumber: 1,
+    // intervalId: '',
+  
+
     wrongAnswer: function() {
         var cardHeader = $(".card-header")
         cardHeader.empty()
