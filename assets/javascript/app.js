@@ -1,18 +1,58 @@
+// global for time
+var time = 0;
+
 var questionNumber = 1;
+
 // save id for setInterval
 var intervalId;
 
 // save id for timer in between questions
 var waitId;
 
+// how long to wait for user to answer
+var waitForUser = 20
+
+// duration of message in-between questions
+var waitForMessage = 5
 
 $( document ).ready(function() {
     console.log( "ready!" );
-    triviaGame.displayQuestion(questionNumber)
+    promptStart()
+    // triviaGame.displayQuestion(questionNumber)
     // game(questionNumber)
     // load a start button on lead
     // btn triggers game to start as new
 });
+
+// fnc for start button and initial display, awaiting user to click to begin the game
+var promptStart = function() {
+    var cardHeader = $(".card-header")
+    cardHeader.empty()
+    var qDiv = $("<h3>")
+    qDiv.text("How about playing some trivia, and finding out?")
+    cardHeader.append(qDiv)
+
+    var cardBody = $(".card-body")
+    cardBody.empty()
+    cardBody.prepend($('<img>',{id:'theImg',src:"assets/images/bender-electric.gif"}))
+
+    var cardFooter = $(".card-footer")
+    cardFooter.empty()
+
+    var timeRemaining = "<p>Time Remaining: <span>"+time+"</span> seconds</p>"
+
+
+    var strBtn = $("<button>")
+    strBtn.addClass("btn")
+    strBtn.addClass("btn-primary")
+    strBtn.text("Start Game")
+    strBtn.on( "click", function(event) {
+        console.log( "Starting a new game" )
+        triviaGame.displayQuestion(questionNumber)
+
+    });
+    cardFooter.append(strBtn)
+}
 
 var triviaGame = {
     questionNumber: 1,
@@ -85,9 +125,9 @@ var triviaGame = {
 
 // timer obj
 var timer = {
-    time: 15,
+    time: waitForUser,
     reset: function() {
-        timer.time = 15
+        timer.time = waitForUser
         displayTime(timer.time)
     },
     stop: function() {
@@ -110,7 +150,7 @@ var timer = {
 }
 
 var waitForNew = {
-    time: 5,
+    time: waitForMessage,
     start: function() {
         waitId = setInterval(waitForNew.count, 1000);
     },
@@ -118,7 +158,7 @@ var waitForNew = {
         clearInterval(waitId); 
     },
     reset: function() {
-        waitForNew.time = 5
+        waitForNew.time = waitForMessage
     },
     count: function() {
         waitForNew.time--
@@ -145,6 +185,7 @@ var waitForNew = {
 // function to add inner html to card footer w info on time remaining
 var displayTime = function(time) {
     var cardFooter = $(".card-footer")
+    cardFooter.empty()
     var timeRemaining = "<p>Time Remaining: <span>"+time+"</span> seconds</p>"
     cardFooter.html(timeRemaining)
 }
