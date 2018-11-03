@@ -144,12 +144,54 @@ var displayTime = function(time) {
 
 // obj to store questions and answers
 var trivia = {
-    first: {
+    '1': {
         question: "What is the name of Leela's Pet?",
-        answers: ["This is the first answer", "This is the second answer", "This is the third answer", "This is the fourth answer"]
+        answers: ["Nobber", "Mibbler", "Nubben", "Nibbler"],
+        correct: "Nibbler"
     },
-    second: {
-        question: "What is the name of Leela's OTHER Pet?",
-        answers: ["This is the first AAnswer", "This is the second answer", "This is the third AAnswer", "This is the fourth AAnswer"]
+    '2': {
+        question: "What is Fry's favourite soft drink?",
+        answers: ["Slurm", "Slurp", "Zero", "Zoorp"],
+        correct: "Slurm"
+    },
+    '3': {
+        question: "What did the Professor's smelloscope detect in space?",
+        answers: ["A planet made of cheese", "A comet", "A ball of garbage", "An alien ship"],
+        correct: "A ball of garbage"
+    },
+    '4': {
+        question: "What was top of the list of Benders 10 most commonly used words?",
+        answers: ["Chump", "Pimpmobile", "Ass", "Chumpette"],
+        correct: "Ass"
+    },
+    '5': {
+        question: "What's the name of the Professor's company?",
+        answers: ["Federal Express", "Planet Express", "Earth Express", "Federal Express"],
+        correct: "Planet Express",
+    },
+    '6': {
+        question: "What is the name of Captain Zapp's assistant?",
+        answers: ["Yip", "Kif", "Zip", "Bif"],
+        correct: "Kif"
+    },
+    '7': {
+        question: "What was the name of the space cruise ship that was destroyed by a black hole?",
+        answers: ["The Mayflower One", "The Titanic", "The Enterprise", "Hunter IV"],
+        correct: "The Titanic"
+    },
+    '8': {
+        question: "What was Fry's job in 1999?",
+        answers: ["Pizza Delivery Boy", "Software Developer", "Candy Truck Driver", "Milkman"],
+        correct: "Pizza Delivery Boy"
+    },
+    '9': {
+        question: "What was Fry's bank account balance in 1999?",
+        answers: ["33 Cents", "53 Cents", "73 Cents", "93 Cents"],
+        correct: "93 Cents"
+    },
+    '10': {
+        question: "1000 years later, what was Fry's bank account balance?",
+        answers: ["2.1 Million", "4.3 Billion", "6.5 Trillion", "6.2 Billion"],
+        correct: "4.3 Billion"
     }
 }
