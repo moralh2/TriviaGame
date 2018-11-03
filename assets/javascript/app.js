@@ -12,10 +12,10 @@ var waitId;
 // try to use one timer
 
 // seconds to wait for user to respond
-var waitForUser = 20
+var waitForUser = 15
 
 // duration [s] for message in-between questions (correct or wrong answer)
-var waitForMessage = 5
+var waitForMessage = 3
 
 // initial call; loads start button, waits for user
 $( document ).ready(function() {
@@ -44,7 +44,7 @@ var promptStart = function() {
     strBtn.addClass("btn-primary")
     strBtn.text("Start Game")
     strBtn.on( "click", function(event) {
-        triviaGame.displayQuestion(questionNumber)
+        displayQuestion(questionNumber)
     });
     cardFooter.append(strBtn)
 }
@@ -72,7 +72,7 @@ var displayQuestion = function(questionNumber) {
         ansDiv.on( "click", function(event) {
             which_one = $(this)[0].innerText  
             console.log( which_one )
-            triviaGame.verifyResponse(which_one)
+            verifyResponse(which_one)
         });
         cardBody.append(ansDiv)
     }
@@ -81,46 +81,60 @@ var displayQuestion = function(questionNumber) {
     timer.start()
 }
 
-var triviaGame = {
-    // questionNumber: 1,
-    // intervalId: '',
-  
-
-    wrongAnswer: function() {
-        var cardHeader = $(".card-header")
-        cardHeader.empty()
-        var qDiv = $("<h3>")
-        var question = "You got it wrong, brah"
-        qDiv.text(question)
-        cardHeader.append(qDiv)
-    
-        var cardBody = $(".card-body")
-        cardBody.empty()
-    
-        cardBody.prepend($('<img>',{id:'theImg',src:"assets/images/bender-crying.gif"}))
-    },
-    verifyResponse: function(answerText) {
-        if (answerText) {
-            if (answerText == trivia[String(questionNumber)].correct) {
-                console.log("you win")
-                timer.stop()
-                //you win
-            } else {
-                console.log("you lose")
-                timer.stop()
-                // you lose
-            }
-        }
-        else {
-            console.log("time out")
-            // timeout
-        }
-        triviaGame.wrongAnswer()
-        waitForNew.start()
-    }
-
+var rightAnswer = function() {
+    var cardHeader = $(".card-header")
+    cardHeader.empty()
+    var qDiv = $("<h3>")
+    var question = "You got it right!"
+    qDiv.text(question)
+    cardHeader.append(qDiv)
+    var cardBody = $(".card-body")
+    cardBody.empty()
+    cardBody.prepend($('<img>',{id:'theImg',src:"assets/images/bender-high-fives-self.gif"}))
 }
 
+var wrongAnswer = function() {
+    var cardHeader = $(".card-header")
+    cardHeader.empty()
+    var qDiv = $("<h3>")
+    var question = "You got it wrong, brah"
+    qDiv.text(question)
+    cardHeader.append(qDiv)
+    var cardBody = $(".card-body")
+    cardBody.empty()
+    cardBody.prepend($('<img>',{id:'theImg',src:"assets/images/bender-crying.gif"}))
+}
+
+var timedOut = function() {
+    var cardHeader = $(".card-header")
+    cardHeader.empty()
+    var qDiv = $("<h3>")
+    var question = "You ran out of 🕰"
+    qDiv.text(question)
+    cardHeader.append(qDiv)
+    var cardBody = $(".card-body")
+    cardBody.empty()
+    cardBody.prepend($('<img>',{id:'theImg',src:"assets/images/bender-you-stink.gif"}))
+}
+
+var verifyResponse = function(answerText) {
+    if (answerText) {
+        if (answerText == trivia[String(questionNumber)].correct) {
+            console.log("you win")
+            timer.stop()
+            rightAnswer()
+        } else {
+            console.log("you lose")
+            timer.stop()
+            wrongAnswer()
+        }
+    }
+    else {
+        console.log("time out")
+        timedOut()
+    }
+    waitForNew.start()
+}
 
 // timer obj
 var timer = {
@@ -143,7 +157,7 @@ var timer = {
     check: function() {
         if (timer.time <= 0) {
             timer.stop()
-            triviaGame.verifyResponse()
+            verifyResponse()
         }
     }
 }
@@ -172,7 +186,7 @@ var waitForNew = {
                 console.log("Game Over")
             }
             else {
-                triviaGame.displayQuestion(questionNumber)
+                displayQuestion(questionNumber)
             }
             // game(questionNumber)
 
