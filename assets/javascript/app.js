@@ -15,43 +15,26 @@ $( document ).ready(function() {
 
 // fnc for start button and initial display, awaiting user to click to begin the game
 var promptStart = function() {
-    var cardHeader = $(".card-header")
-    cardHeader.empty()
-    
-    var qDiv = $("<h3>")
-    qDiv.text("How about playing some trivia, and finding out?")
-    cardHeader.append(qDiv)
-
-    var cardBody = $(".card-body")
-    cardBody.empty()
-    
-    cardBody.prepend($('<img>',{id:'theImg',src:"assets/images/bender-electric.gif"}))
-
-    var cardFooter = $(".card-footer")
-    cardFooter.empty()
-
-    var strBtn = $("<button>")
-    strBtn.addClass("btn")
-    strBtn.addClass("btn-primary")
-    strBtn.text("Start Game")
-    strBtn.on( "click", function(event) {
-        displayQuestion(questionNumber)
-    });
-    cardFooter.append(strBtn)
+    displayStart("How about playing some trivia, and finding out?", "assets/images/bender-electric.gif", "Start Game")
 }
 
 var gameOver = function() {
+    head = "Game Over. Let's see how you did: " + wins + " right & " + losses + " wrong"
+    displayStart(head, "assets/images/bender-dancing.gif", "Play Again")
+}
+
+var displayStart = function(head, image, footer) {
     var cardHeader = $(".card-header")
     cardHeader.empty()
     
     var qDiv = $("<h3>")
-    qDiv.text("Game Over. Let's see how you did: " + wins + " right & " + losses + " wrong")
+    qDiv.text(head)
     cardHeader.append(qDiv)
 
     var cardBody = $(".card-body")
     cardBody.empty()
     
-    cardBody.prepend($('<img>',{id:'theImg',src:"assets/images/bender-dancing.gif"}))
+    cardBody.prepend($('<img>',{id:'theImg',src: image}))
 
     var cardFooter = $(".card-footer")
     cardFooter.empty()
@@ -59,9 +42,9 @@ var gameOver = function() {
     var strBtn = $("<button>")
     strBtn.addClass("btn")
     strBtn.addClass("btn-primary")
-    strBtn.text("Play Again")
+    strBtn.text(footer)
     strBtn.on( "click", function(event) {
-        resetGame()
+        resetGame() 
         displayQuestion(questionNumber)
     });
     cardFooter.append(strBtn)
@@ -72,7 +55,7 @@ var resetGame = function() {
     wins = 0
     losses = 0
     questionNumber = 1
-    waitForUser--
+    // waitForUser--
 }
 
 // fnc to load html w/ question and answers unto page; resets, starts timer
@@ -147,6 +130,7 @@ var verifyResponse = function(answerText) {
     }
     else {
         timedOut()
+        losses++
     }
     intermission = 1
     timer.reset(waitForMessage)
