@@ -6,21 +6,22 @@ var questionNumber = 1;                         // current question
 var intervalId;                                 // id for setInterval timer
 var waitForUser = 14                            // seconds to wait for user to respond
 var waitForMessage = 2                          // duration [s] for message in-between questions (correct or wrong answer)
+var lastAnswer = ''
 
 // initial call; loads start button, waits for user
 $(document).ready(function() { promptStart() });
 
 // fnc for start button and initial display, awaiting user to click to begin the game
-var promptStart = function() { displayStart("How about playing some trivia, and finding out?", "assets/images/bender-electric.gif", "Start Game") }
+function promptStart() { displayStart("How about playing some trivia, and finding out?", "assets/images/bender-electric.gif", "Start Game") }
 
 // fnc for game over, loads play-again btn
-var gameOver = function() {
+function gameOver() {
     head = "Game Over. Let's see how you did: " + wins + " right & " + losses + " wrong!"
     displayStart(head, "assets/images/bender-dancing.gif", "Play Again")
 }
 
 // reset variables for new game
-var resetGame = function() {
+function resetGame() {
     time = 0
     wins = 0
     losses = 0
@@ -28,7 +29,7 @@ var resetGame = function() {
 }
 
 // display card header content
-var displayHeader = function(head) {
+function displayHeader(head) {
     var cardHeader = $(".card-header")
     cardHeader.empty()
     var qDiv = $("<h3>")
@@ -37,7 +38,7 @@ var displayHeader = function(head) {
 }
 
 // display image in card body
-var displayImage = function(image) {
+function displayImage(image) {
     var cardBody = $(".card-body")
     cardBody.empty()
     imgBody = $('<img>',{id:'theImg',src: image})
@@ -45,17 +46,8 @@ var displayImage = function(image) {
     cardBody.prepend(imgBody)
 }
 
-// display second image in card body
-var displaySecondImage = function(image) {
-    var cardBody = $(".card-body")
-    // cardBody.empty()
-    imgBody = $('<img>',{id:'theImg',src: image})
-    imgBody.addClass("img-fluid")
-    cardBody.append(imgBody)
-}
-
 // loads content for game start and game over (message, btn, gif)
-var displayStart = function(head, image, footer) {
+function displayStart(head, image, footer) {
     displayHeader(head)
     displayImage(image)
     var cardFooter = $(".card-footer")
@@ -70,15 +62,13 @@ var displayStart = function(head, image, footer) {
 }
 
 // fnc to load html w/ question and answers unto page; resets, starts timer
-var displayQuestion = function(questionNumber) {
+function displayQuestion(questionNumber) {
     intermission = 0
     curruentQuestion = String(questionNumber)
     displayHeader(trivia[curruentQuestion].question)
-
     var cardBody = $(".card-body")
     cardBody.empty()
     var answerArray = trivia[curruentQuestion].answers
-
     for (i = 0; i < answerArray.length; i++) {
         var ansDiv = $("<div>")
         ansDiv.addClass("alert").addClass("possible-answer").text(answerArray[i])
@@ -92,31 +82,42 @@ var displayQuestion = function(questionNumber) {
 }
 
 // loads html content for in-between questions, with approproate message (win, loss, timeout) and gif
-var displayIntermission = function(head, image) {
+function displayIntermission(head, image) {
     displayHeader(head)
     displayImage(image)
-    displaySecondImage(trivia[String(questionNumber)].gif)
-
 }
 
-// verify if user answered correctly or not at all, display meesage/gif for win, lose or
-var verifyResponse = function(answerText) {
+// verify if user answered correctly or not at all, display correct answer, call to display meesage/gif for win, lose
+function verifyResponse(answerText) {
+    if (answerText) {   
+        timer.stop() 
+        lastAnswer = answerText
+    }
+    else {
+        lastAnswer = ''
+    }
+    intermission = 1
+    timer.reset(waitForMessage+1)
+    var theCorrectAnswer = "The correct answer was: " + trivia[String(questionNumber)].correct + "!"
+    displayIntermission(theCorrectAnswer, trivia[String(questionNumber)].gif)
+    timer.start()
+}
+
+// display message for win, lose
+function flagScore(answerText) {
     if (answerText) {
-        timer.stop()
         if (answerText == trivia[String(questionNumber)].correct) {
             wins++
             displayIntermission("You got it right!", "assets/images/bender-high-fives-self.gif")
         } else {
             losses++
-            var messageWrong = "You got it wrong, brah! The correct answer was: " + trivia[String(questionNumber)].correct + "!"
-            displayIntermission(messageWrong, "assets/images/bender-crying.gif")
+            displayIntermission("You got it wrong, brah!", "assets/images/bender-crying.gif")
         }
     }
     else {
         displayIntermission("You ran out of 🕰", "assets/images/bender-you-stink.gif")
         losses++
     }
-    intermission = 1
     timer.reset(waitForMessage)
     timer.start()
 }
@@ -132,7 +133,10 @@ var timer = {
     },
     count: function() {
         time--
-        if (intermission) {
+        if (intermission == 1) {
+            timer.checkCorrect()
+        }
+        else if (intermission == 2) {
             timer.checkIntermission()
         }
         else {
@@ -162,17 +166,25 @@ var timer = {
             }
         }
     },
+    checkCorrect: function() {
+        if (time <= 0) {
+            timer.stop()
+            timer.reset(waitForMessage)
+            ++intermission
+            flagScore(lastAnswer)
+        }
+    },
 }
 
 // function to add inner html to card footer w info on time remaining
-var displayTime = function(time) {
+function displayTime(time) {
     var cardFooter = $(".card-footer")
     cardFooter.empty()
     var timeRemaining = "<p>Time Remaining: <span>"+time+"</span> seconds</p>"
     cardFooter.html(timeRemaining)
 }
 
-// obj to store questions and answers
+// obj to store questions and answers, and gifs
 var trivia = {
     '1': {
         question: "What is the name of Leela's Pet?",
