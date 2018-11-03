@@ -1,7 +1,12 @@
 // used for timers
 var time = 0;
 
+// to know what kind of content is being displayed, and set the appropriate wait time
 var intermission = 0
+
+// user stats
+var wins = 0
+var losses = 0
 
 // current question
 var questionNumber = 1;
@@ -14,10 +19,10 @@ var waitId;
 // try to use one timer
 
 // seconds to wait for user to respond
-var waitForUser = 15
+var waitForUser = 14
 
 // duration [s] for message in-between questions (correct or wrong answer)
-var waitForMessage = 3
+var waitForMessage = 2
 
 // initial call; loads start button, waits for user
 $( document ).ready(function() {
@@ -49,6 +54,41 @@ var promptStart = function() {
         displayQuestion(questionNumber)
     });
     cardFooter.append(strBtn)
+}
+
+var gameOver = function() {
+    var cardHeader = $(".card-header")
+    cardHeader.empty()
+    
+    var qDiv = $("<h3>")
+    qDiv.text("Game Over. Let's see how you did: " + wins + " right & " + losses + " wrong")
+    cardHeader.append(qDiv)
+
+    var cardBody = $(".card-body")
+    cardBody.empty()
+    
+    cardBody.prepend($('<img>',{id:'theImg',src:"assets/images/bender-dancing.gif"}))
+
+    var cardFooter = $(".card-footer")
+    cardFooter.empty()
+
+    var strBtn = $("<button>")
+    strBtn.addClass("btn")
+    strBtn.addClass("btn-primary")
+    strBtn.text("Play Again")
+    strBtn.on( "click", function(event) {
+        resetGame()
+        displayQuestion(questionNumber)
+    });
+    cardFooter.append(strBtn)
+}
+
+var resetGame = function() {
+    time = 0
+    wins = 0
+    losses = 0
+    questionNumber = 1
+    waitForUser--
 }
 
 // fnc to load html w/ question and answers unto page; resets, starts timer
@@ -124,9 +164,11 @@ var verifyResponse = function(answerText) {
     if (answerText) {
         if (answerText == trivia[String(questionNumber)].correct) {
             console.log("you win")
+            wins++
             timer.stop()
             rightAnswer()
         } else {
+            losses++
             console.log("you lose")
             timer.stop()
             wrongAnswer()
@@ -139,7 +181,6 @@ var verifyResponse = function(answerText) {
     intermission = 1
     timer.reset(waitForMessage)
     timer.start()
-    // waitForNew.start()
 }
 
 // timer obj
@@ -177,6 +218,7 @@ var timer = {
             ++questionNumber
             if (questionNumber > 10) {
                 console.log("Game Over")
+                gameOver()
             }
             else {
                 displayQuestion(questionNumber)
@@ -184,36 +226,6 @@ var timer = {
         }
     },
 }
-
-// var waitForNew = {
-//     time: waitForMessage,
-//     start: function() {
-//         waitId = setInterval(waitForNew.count, 1000);
-//     },
-//     stop: function() {
-//         clearInterval(waitId); 
-//     },
-//     reset: function() {
-//         waitForNew.time = waitForMessage
-//     },
-//     count: function() {
-//         waitForNew.time--
-//         waitForNew.check()
-//     },
-//     check: function() {
-//         if (waitForNew.time <= 0) {
-//             waitForNew.stop()
-//             waitForNew.reset()
-//             ++questionNumber
-//             if (questionNumber > 10) {
-//                 console.log("Game Over")
-//             }
-//             else {
-//                 displayQuestion(questionNumber)
-//             }
-//         }
-//     },
-// }
 
 // function to add inner html to card footer w info on time remaining
 var displayTime = function(time) {
