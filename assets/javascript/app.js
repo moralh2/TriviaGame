@@ -1,6 +1,8 @@
 // used for timers
 var time = 0;
 
+var intermission = 0
+
 // current question
 var questionNumber = 1;
 
@@ -51,6 +53,7 @@ var promptStart = function() {
 
 // fnc to load html w/ question and answers unto page; resets, starts timer
 var displayQuestion = function(questionNumber) {
+    intermission = 0
     curruentQuestion = String(questionNumber)
 
     var cardHeader = $(".card-header")
@@ -77,7 +80,7 @@ var displayQuestion = function(questionNumber) {
         cardBody.append(ansDiv)
     }
 
-    timer.reset()
+    timer.reset(waitForUser)
     timer.start()
 }
 
@@ -133,54 +136,44 @@ var verifyResponse = function(answerText) {
         console.log("time out")
         timedOut()
     }
-    waitForNew.start()
+    intermission = 1
+    timer.reset(waitForMessage)
+    timer.start()
+    // waitForNew.start()
 }
 
 // timer obj
 var timer = {
-    time: waitForUser,
-    reset: function() {
-        timer.time = waitForUser
-        displayTime(timer.time)
+    reset: function(resetTime) {
+        time = resetTime
+        if (!intermission) { displayTime(time) } 
     },
     stop: function() {
         clearInterval(intervalId); 
     },
     count: function() {
-        timer.time--
-        displayTime(timer.time)
-        timer.check()
+        time--
+        if (intermission) {
+            timer.checkIntermission()
+        }
+        else {
+            displayTime(time)
+            timer.check()
+        }
     },
     start: function() {
         intervalId = setInterval(timer.count, 1000);
     },
     check: function() {
-        if (timer.time <= 0) {
+        if (time <= 0) {
             timer.stop()
             verifyResponse()
         }
-    }
-}
-
-var waitForNew = {
-    time: waitForMessage,
-    start: function() {
-        waitId = setInterval(waitForNew.count, 1000);
     },
-    stop: function() {
-        clearInterval(waitId); 
-    },
-    reset: function() {
-        waitForNew.time = waitForMessage
-    },
-    count: function() {
-        waitForNew.time--
-        waitForNew.check()
-    },
-    check: function() {
-        if (waitForNew.time <= 0) {
-            waitForNew.stop()
-            waitForNew.reset()
+    checkIntermission: function() {
+        if (time <= 0) {
+            timer.stop()
+            timer.reset(waitForUser)
             ++questionNumber
             if (questionNumber > 10) {
                 console.log("Game Over")
@@ -188,12 +181,39 @@ var waitForNew = {
             else {
                 displayQuestion(questionNumber)
             }
-            // game(questionNumber)
-
-            // nextQuestion()
         }
     },
 }
+
+// var waitForNew = {
+//     time: waitForMessage,
+//     start: function() {
+//         waitId = setInterval(waitForNew.count, 1000);
+//     },
+//     stop: function() {
+//         clearInterval(waitId); 
+//     },
+//     reset: function() {
+//         waitForNew.time = waitForMessage
+//     },
+//     count: function() {
+//         waitForNew.time--
+//         waitForNew.check()
+//     },
+//     check: function() {
+//         if (waitForNew.time <= 0) {
+//             waitForNew.stop()
+//             waitForNew.reset()
+//             ++questionNumber
+//             if (questionNumber > 10) {
+//                 console.log("Game Over")
+//             }
+//             else {
+//                 displayQuestion(questionNumber)
+//             }
+//         }
+//     },
+// }
 
 // function to add inner html to card footer w info on time remaining
 var displayTime = function(time) {
