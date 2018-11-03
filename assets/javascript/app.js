@@ -1,28 +1,12 @@
-// used for timers
-var time = 0;
-
-// to know what kind of content is being displayed, and set the appropriate wait time
-var intermission = 0
-
-// user stats
+// variables
+var time = 0;                                   // time in seconds for timer
+var intermission = 0                            // to know what kind of content is being displayed, and set the appropriate wait time
 var wins = 0
 var losses = 0
-
-// current question
-var questionNumber = 1;
-
-// id for setInterval timer
-var intervalId;
-
-// save id for timer in between questions
-var waitId;
-// try to use one timer
-
-// seconds to wait for user to respond
-var waitForUser = 14
-
-// duration [s] for message in-between questions (correct or wrong answer)
-var waitForMessage = 2
+var questionNumber = 1;                         // current question
+var intervalId;                                 // id for setInterval timer
+var waitForUser = 14                            // seconds to wait for user to respond
+var waitForMessage = 2                          // duration [s] for message in-between questions (correct or wrong answer)
 
 // initial call; loads start button, waits for user
 $( document ).ready(function() {
@@ -125,57 +109,43 @@ var displayQuestion = function(questionNumber) {
 }
 
 var rightAnswer = function() {
-    var cardHeader = $(".card-header")
-    cardHeader.empty()
-    var qDiv = $("<h3>")
-    var question = "You got it right!"
-    qDiv.text(question)
-    cardHeader.append(qDiv)
-    var cardBody = $(".card-body")
-    cardBody.empty()
-    cardBody.prepend($('<img>',{id:'theImg',src:"assets/images/bender-high-fives-self.gif"}))
+    displayIntermission("You got it right!", "assets/images/bender-high-fives-self.gif")
 }
 
 var wrongAnswer = function() {
-    var cardHeader = $(".card-header")
-    cardHeader.empty()
-    var qDiv = $("<h3>")
-    var question = "You got it wrong, brah"
-    qDiv.text(question)
-    cardHeader.append(qDiv)
-    var cardBody = $(".card-body")
-    cardBody.empty()
-    cardBody.prepend($('<img>',{id:'theImg',src:"assets/images/bender-crying.gif"}))
+    displayIntermission("You got it wrong, brah", "assets/images/bender-crying.gif")
 }
 
 var timedOut = function() {
+    displayIntermission("You ran out of 🕰", "assets/images/bender-you-stink.gif")
+}
+
+// loads html content for in-between questions, with approproate message (win, loss, timeout) and gif
+var displayIntermission = function(head, image) {
     var cardHeader = $(".card-header")
     cardHeader.empty()
     var qDiv = $("<h3>")
-    var question = "You ran out of 🕰"
+    var question = head
     qDiv.text(question)
     cardHeader.append(qDiv)
     var cardBody = $(".card-body")
     cardBody.empty()
-    cardBody.prepend($('<img>',{id:'theImg',src:"assets/images/bender-you-stink.gif"}))
+    cardBody.prepend($('<img>',{id:'theImg',src: image}))
 }
 
 var verifyResponse = function(answerText) {
     if (answerText) {
         if (answerText == trivia[String(questionNumber)].correct) {
-            console.log("you win")
             wins++
             timer.stop()
             rightAnswer()
         } else {
             losses++
-            console.log("you lose")
             timer.stop()
             wrongAnswer()
         }
     }
     else {
-        console.log("time out")
         timedOut()
     }
     intermission = 1
