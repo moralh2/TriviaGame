@@ -40,7 +40,9 @@ var displayHeader = function(head) {
 var displayImage = function(image) {
     var cardBody = $(".card-body")
     cardBody.empty()
-    cardBody.prepend($('<img>',{id:'theImg',src: image}))
+    imgBody = $('<img>',{id:'theImg',src: image})
+    imgBody.addClass("img-fluid")
+    cardBody.prepend(imgBody)
 }
 
 // loads content for game start and game over (message, btn, gif)
@@ -86,7 +88,7 @@ var displayIntermission = function(head, image) {
     displayImage(image)
 }
 
-// verify if user answered correctly or not at all, display meesage/gif for win, lose or timeout
+// verify if user answered correctly or not at all, display meesage/gif for win, lose or
 var verifyResponse = function(answerText) {
     if (answerText) {
         timer.stop()
