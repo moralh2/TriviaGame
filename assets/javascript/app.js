@@ -1,4 +1,3 @@
-// variables
 var time = 0;                                   // time in seconds for timer
 var intermission = 0                            // to know what kind of content is being displayed, and set the appropriate wait time
 var wins = 0
@@ -9,36 +8,47 @@ var waitForUser = 14                            // seconds to wait for user to r
 var waitForMessage = 2                          // duration [s] for message in-between questions (correct or wrong answer)
 
 // initial call; loads start button, waits for user
-$( document ).ready(function() {
-    promptStart()
-});
+$(document).ready(function() { promptStart() });
 
 // fnc for start button and initial display, awaiting user to click to begin the game
-var promptStart = function() {
-    displayStart("How about playing some trivia, and finding out?", "assets/images/bender-electric.gif", "Start Game")
-}
+var promptStart = function() { displayStart("How about playing some trivia, and finding out?", "assets/images/bender-electric.gif", "Start Game") }
 
+// fnc for game over, loads play-again btn
 var gameOver = function() {
-    head = "Game Over. Let's see how you did: " + wins + " right & " + losses + " wrong"
+    head = "Game Over. Let's see how you did: " + wins + " right & " + losses + " wrong!"
     displayStart(head, "assets/images/bender-dancing.gif", "Play Again")
 }
 
-var displayStart = function(head, image, footer) {
+// reset variables for new game
+var resetGame = function() {
+    time = 0
+    wins = 0
+    losses = 0
+    questionNumber = 1
+}
+
+// display card header content
+var displayHeader = function(head) {
     var cardHeader = $(".card-header")
     cardHeader.empty()
-    
     var qDiv = $("<h3>")
     qDiv.text(head)
     cardHeader.append(qDiv)
+}
 
+// display image in card body
+var displayImage = function(image) {
     var cardBody = $(".card-body")
     cardBody.empty()
-    
     cardBody.prepend($('<img>',{id:'theImg',src: image}))
+}
 
+// loads content for game start and game over (message, btn, gif)
+var displayStart = function(head, image, footer) {
+    displayHeader(head)
+    displayImage(image)
     var cardFooter = $(".card-footer")
     cardFooter.empty()
-
     var strBtn = $("<button>")
     strBtn.addClass("btn")
     strBtn.addClass("btn-primary")
@@ -50,25 +60,11 @@ var displayStart = function(head, image, footer) {
     cardFooter.append(strBtn)
 }
 
-var resetGame = function() {
-    time = 0
-    wins = 0
-    losses = 0
-    questionNumber = 1
-    // waitForUser--
-}
-
 // fnc to load html w/ question and answers unto page; resets, starts timer
 var displayQuestion = function(questionNumber) {
     intermission = 0
     curruentQuestion = String(questionNumber)
-
-    var cardHeader = $(".card-header")
-    cardHeader.empty()
-    var qDiv = $("<h3>")
-    var question = trivia[curruentQuestion].question
-    qDiv.text(question)
-    cardHeader.append(qDiv)
+    displayHeader(trivia[curruentQuestion].question)
 
     var cardBody = $(".card-body")
     cardBody.empty()
@@ -86,34 +82,30 @@ var displayQuestion = function(questionNumber) {
         });
         cardBody.append(ansDiv)
     }
-
     timer.reset(waitForUser)
     timer.start()
 }
 
-var rightAnswer = function() {
-    displayIntermission("You got it right!", "assets/images/bender-high-fives-self.gif")
-}
+var rightAnswer = function()    { displayIntermission("You got it right!", "assets/images/bender-high-fives-self.gif") }
 
-var wrongAnswer = function() {
-    displayIntermission("You got it wrong, brah", "assets/images/bender-crying.gif")
-}
+var wrongAnswer = function()    { displayIntermission("You got it wrong, brah", "assets/images/bender-crying.gif") }
 
-var timedOut = function() {
-    displayIntermission("You ran out of 🕰", "assets/images/bender-you-stink.gif")
-}
+var timedOut = function()       { displayIntermission("You ran out of 🕰", "assets/images/bender-you-stink.gif") }
 
 // loads html content for in-between questions, with approproate message (win, loss, timeout) and gif
 var displayIntermission = function(head, image) {
-    var cardHeader = $(".card-header")
-    cardHeader.empty()
-    var qDiv = $("<h3>")
-    var question = head
-    qDiv.text(question)
-    cardHeader.append(qDiv)
-    var cardBody = $(".card-body")
-    cardBody.empty()
-    cardBody.prepend($('<img>',{id:'theImg',src: image}))
+    displayHeader(head)
+    displayImage(image)
+
+    // var cardHeader = $(".card-header")
+    // cardHeader.empty()
+    // var qDiv = $("<h3>")
+    // var question = head
+    // qDiv.text(question)
+    // cardHeader.append(qDiv)
+    // var cardBody = $(".card-body")
+    // cardBody.empty()
+    // cardBody.prepend($('<img>',{id:'theImg',src: image}))
 }
 
 var verifyResponse = function(answerText) {
