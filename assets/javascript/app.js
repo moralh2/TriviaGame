@@ -1,10 +1,6 @@
 var questionNumber = 1;
-
-
-
 // save id for setInterval
 var intervalId;
-
 
 // save id for timer in between questions
 var waitId;
@@ -12,77 +8,80 @@ var waitId;
 
 $( document ).ready(function() {
     console.log( "ready!" );
-    game(questionNumber)
+    triviaGame.displayQuestion(questionNumber)
+    // game(questionNumber)
+    // load a start button on lead
+    // btn triggers game to start as new
 });
 
-var game = function(questionNumber) {
+var triviaGame = {
+    questionNumber: 1,
+    intervalId: '',
+    displayQuestion: function(questionNumber) {
+        curruentQuestion = String(questionNumber)
 
-    whichQ = String(questionNumber)
-    var cardHeader = $(".card-header")
-    cardHeader.empty()
-    var qDiv = $("<h3>")
-    var question = trivia[whichQ].question
-    qDiv.text(question)
-    cardHeader.append(qDiv)
-
-    var cardBody = $(".card-body")
-    cardBody.empty()
-    var answerArray = trivia[whichQ].answers
-
-    for (i = 0; i < answerArray.length; i++) {
-        var ansDiv = $("<div>")
-        ansDiv.addClass("alert")
-        ansDiv.addClass("possible-answer")
-        ansDiv.text(answerArray[i])
-        ansDiv.on( "click", function(event) {
-            which_one = $(this)[0].innerText  
-            console.log( which_one )
-            weveGotALiveOne(which_one)
-        });
-        cardBody.append(ansDiv)
-    }
-
-    timer.reset()
-    timer.start()
-
-}
-
-var wrongQ = function() {
-
-    var cardHeader = $(".card-header")
-    cardHeader.empty()
-    var qDiv = $("<h3>")
-    var question = "You got it wrong, brah"
-    qDiv.text(question)
-    cardHeader.append(qDiv)
-
-    var cardBody = $(".card-body")
-    cardBody.empty()
-
-    cardBody.prepend($('<img>',{id:'theImg',src:"assets/images/bender-crying.gif"}))
+        var cardHeader = $(".card-header")
+        cardHeader.empty()
+        var qDiv = $("<h3>")
+        var question = trivia[curruentQuestion].question
+        qDiv.text(question)
+        cardHeader.append(qDiv)
     
-
-}
-var weveGotALiveOne = function(answerText) {
-    if (answerText) {
-        if (answerText == correctAnswer) {
-            console.log("you win")
-            timer.stop()
-            //you win
-        } else {
-            console.log("you lose")
-            timer.stop()
-            // you lose
+        var cardBody = $(".card-body")
+        cardBody.empty()
+        var answerArray = trivia[curruentQuestion].answers
+    
+        for (i = 0; i < answerArray.length; i++) {
+            var ansDiv = $("<div>")
+            ansDiv.addClass("alert")
+            ansDiv.addClass("possible-answer")
+            ansDiv.text(answerArray[i])
+            ansDiv.on( "click", function(event) {
+                which_one = $(this)[0].innerText  
+                console.log( which_one )
+                triviaGame.verifyResponse(which_one)
+            });
+            cardBody.append(ansDiv)
         }
-    }
-    else {
-        console.log("time out")
-        // timeout
+    
+        timer.reset()
+        timer.start()
+    },
+    wrongAnswer: function() {
+        var cardHeader = $(".card-header")
+        cardHeader.empty()
+        var qDiv = $("<h3>")
+        var question = "You got it wrong, brah"
+        qDiv.text(question)
+        cardHeader.append(qDiv)
+    
+        var cardBody = $(".card-body")
+        cardBody.empty()
+    
+        cardBody.prepend($('<img>',{id:'theImg',src:"assets/images/bender-crying.gif"}))
+    },
+    verifyResponse: function(answerText) {
+        if (answerText) {
+            if (answerText == trivia[String(questionNumber)].correct) {
+                console.log("you win")
+                timer.stop()
+                //you win
+            } else {
+                console.log("you lose")
+                timer.stop()
+                // you lose
+            }
+        }
+        else {
+            console.log("time out")
+            // timeout
+        }
+        triviaGame.wrongAnswer()
+        waitForNew.start()
     }
 
-    wrongQ()
-    waitForNew.start()
 }
+
 
 // timer obj
 var timer = {
@@ -105,7 +104,7 @@ var timer = {
     check: function() {
         if (timer.time <= 0) {
             timer.stop()
-            weveGotALiveOne()
+            triviaGame.verifyResponse()
         }
     }
 }
@@ -130,7 +129,13 @@ var waitForNew = {
             waitForNew.stop()
             waitForNew.reset()
             ++questionNumber
-            game(questionNumber)
+            if (questionNumber > 10) {
+                console.log("Game Over")
+            }
+            else {
+                triviaGame.displayQuestion(questionNumber)
+            }
+            // game(questionNumber)
 
             // nextQuestion()
         }
