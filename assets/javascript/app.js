@@ -97,7 +97,8 @@ var verifyResponse = function(answerText) {
             displayIntermission("You got it right!", "assets/images/bender-high-fives-self.gif")
         } else {
             losses++
-            displayIntermission("You got it wrong, brah", "assets/images/bender-crying.gif")
+            var messageWrong = "You got it wrong, brah! The correct answer was: " + trivia[String(questionNumber)].correct + "!"
+            displayIntermission(messageWrong, "assets/images/bender-crying.gif")
         }
     }
     else {
